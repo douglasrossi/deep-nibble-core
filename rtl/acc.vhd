@@ -1,1 +1,1 @@
- 
+-- Accumulator component
