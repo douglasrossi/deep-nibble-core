@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity muxm is
   port (
-    i_DATA : in std_logic_vector(23 downto 1);
+    i_DATA : in std_logic_vector(22 downto 0);
     i_SEL  : in std_logic_vector(4 downto 0);
     o_DATA : out std_logic_vector(9 downto 0)
   );

@@ -16,6 +16,6 @@ begin
 
   w_NDATA <= not(i_DATA(22 downto 0));
   o_DATA  <= i_DATA(22 downto 0) when i_DATA(23) = '0' else
-    std_logic_vector(unsigned(unsigned(w_NDATA) + 1));
+    std_logic_vector(unsigned(w_NDATA) + 1);
 
 end rtl;
