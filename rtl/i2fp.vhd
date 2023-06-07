@@ -12,11 +12,8 @@ entity i2fp is
 end i2fp;
 
 architecture rtl of i2fp is
-
-  signal w_MAXINDEX : natural range 0 to 31;
-  signal w_UNSIGN   : std_logic_vector(22 downto 0);
-  signal w_E        : std_logic_vector(4 downto 0);
-  signal w_M        : std_logic_vector(32 downto 0);
+  signal w_UNSIGN : std_logic_vector(22 downto 0);
+  signal w_E      : std_logic_vector(4 downto 0);
 
   component unsign
     port (
@@ -31,6 +28,15 @@ architecture rtl of i2fp is
       o_DATA : out std_logic_vector(4 downto 0)
     );
   end component;
+
+  component muxm
+    port (
+      i_DATA : in std_logic_vector(23 downto 1);
+      i_SEL  : in std_logic_vector(4 downto 0);
+      o_DATA : out std_logic_vector(9 downto 0)
+    );
+  end component;
+
 begin
 
   U0_unsign : unsign
@@ -45,10 +51,14 @@ begin
     o_DATA => w_E
   );
 
-  w_M        <= w_UNSIGN & "1000000000";
-  w_MAXINDEX <= to_integer(unsigned(w_E));
-  o_S        <= i_Z(23);
-  o_E        <= w_E;
-  o_M        <= w_M(w_MAXINDEX + 9 downto w_MAXINDEX);
+  U0_muxm : muxm
+  port map(
+    i_DATA => w_UNSIGN,
+    i_SEL  => w_E,
+    o_DATA => o_M
+  );
+
+  o_S <= i_Z(23);
+  o_E <= w_E;
 
 end rtl;
