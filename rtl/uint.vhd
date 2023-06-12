@@ -2,14 +2,14 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity unsign is
+entity uint is
   port (
     i_DATA : in std_logic_vector(23 downto 0);
     o_DATA : out std_logic_vector(22 downto 0)
   );
-end unsign;
+end uint;
 
-architecture rtl of unsign is
+architecture rtl of uint is
   signal w_NDATA : std_logic_vector(22 downto 0);
 
 begin

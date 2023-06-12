@@ -15,14 +15,14 @@ architecture rtl of i2fp is
   signal w_UNSIGN : std_logic_vector(22 downto 0);
   signal w_E      : std_logic_vector(4 downto 0);
 
-  component unsign
+  component uint
     port (
       i_DATA : in std_logic_vector(23 downto 0);
       o_DATA : out std_logic_vector(22 downto 0)
     );
   end component;
 
-  component leading
+  component lod
     port (
       i_DATA : in std_logic_vector(22 downto 0);
       o_DATA : out std_logic_vector(4 downto 0)
@@ -39,13 +39,13 @@ architecture rtl of i2fp is
 
 begin
 
-  U0_unsign : unsign
+  U0_unsign : uint
   port map(
     i_DATA => i_Z,
     o_DATA => w_UNSIGN
   );
 
-  U0_leading : leading
+  U0_leading : lod
   port map(
     i_DATA => w_UNSIGN,
     o_DATA => w_E
