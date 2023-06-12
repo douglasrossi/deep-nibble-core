@@ -2,14 +2,14 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity leading is
+entity lod is
   port (
     i_DATA : in std_logic_vector(23 downto 1);
     o_DATA : out std_logic_vector(4 downto 0)
   );
-end leading;
+end lod;
 
-architecture rtl of leading is
+architecture rtl of lod is
 
   function maxindex(a : std_logic_vector) return natural is
     variable index      : natural := 0;
