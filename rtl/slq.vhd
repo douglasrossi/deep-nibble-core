@@ -4,16 +4,16 @@ use ieee.numeric_std.all;
 
 entity slq is
   port (
-    i_CLK : in std_logic;
-    i_RST : in std_logic;
+    i_CLK  : in std_logic;
+    i_RST  : in std_logic;
     i_RECT : in std_logic;
-    i_S : in std_logic;
+    i_S    : in std_logic;
     i_GETK : in std_logic;
-    i_E : in std_logic_vector(4 downto 0);
-    i_M : in std_logic_vector(9 downto 0);
+    i_E    : in std_logic_vector(4 downto 0);
+    i_M    : in std_logic_vector(9 downto 0);
     i_RAND : in std_logic_vector(9 downto 0);
-    i_K : in std_logic_vector(2 downto 0);
-    o_YDN : out std_logic_vector(3 downto 0);
+    i_K    : in std_logic_vector(2 downto 0);
+    o_YDN  : out std_logic_vector(3 downto 0);
     o_ZERO : out std_logic;
     o_YMAX : out std_logic
   );
@@ -21,11 +21,20 @@ end slq;
 
 architecture rtl of slq is
 
-  signal w_GREATER, w_LESS, w_OVERFLOW, w_UNDERFLOW, w_ANDRECTS, W_EN, w_ANDSGETK, w_UNDERFLOWMUX : std_logic := '0';
-  signal w_SUM, w_MUXOUT, w_KSUB : unsigned(5 downto 0) := (others => '0');
-  signal w_SUBMUX : unsigned(2 downto 0) := (others => '0');
-  signal w_MUXSEL : std_logic_vector(1 downto 0) := (others => '0');
-  signal w_REG : std_logic_vector(5 downto 0) := (others => '0');
+  signal w_GREATER      : std_logic;
+  signal w_LESS         : std_logic;
+  signal w_OVERFLOW     : std_logic;
+  signal w_UNDERFLOW    : std_logic;
+  signal w_ANDRECTS     : std_logic;
+  signal w_EN           : std_logic;
+  signal w_ANDSGETK     : std_logic;
+  signal w_UNDERFLOWMUX : std_logic;
+  signal w_SUM          : unsigned(5 downto 0);
+  signal w_MUXOUT       : unsigned(5 downto 0);
+  signal w_KSUB         : unsigned(5 downto 0);
+  signal w_SUBMUX       : unsigned(2 downto 0);
+  signal w_MUXSEL       : std_logic_vector(1 downto 0);
+  signal w_REG          : std_logic_vector(5 downto 0);
 
   -- register component
   component reg
@@ -36,8 +45,8 @@ architecture rtl of slq is
       i_CLK : in std_logic;
       i_RST : in std_logic;
       i_ENA : in std_logic;
-      i_D : in std_logic_vector(p_WIDTH - 1 downto 0);
-      o_Q : out std_logic_vector(p_WIDTH - 1 downto 0)
+      i_D   : in std_logic_vector(p_WIDTH - 1 downto 0);
+      o_Q   : out std_logic_vector(p_WIDTH - 1 downto 0)
     );
   end component;
 begin
@@ -80,16 +89,16 @@ begin
     i_CLK => i_CLK,
     i_RST => i_RST,
     i_ENA => w_EN,
-    i_D => std_logic_vector(w_SUM),
-    o_Q => w_REG
+    i_D   => std_logic_vector(w_SUM),
+    o_Q   => w_REG
   );
 
   -- Mux inside
   process (w_SUM, w_KSUB, i_GETK)
   begin
     case i_GETK is
-      when '0' => w_MUXOUT <= w_SUM;
-      when '1' => w_MUXOUT <= w_KSUB;
+      when '0' => w_MUXOUT    <= w_SUM;
+      when '1' => w_MUXOUT    <= w_KSUB;
       when others => w_MUXOUT <= (others => '0');
     end case;
   end process;
@@ -132,10 +141,10 @@ begin
   process (w_MUXSEL, w_SUBMUX, w_ANDSGETK, w_UNDERFLOWMUX)
   begin
     case w_MUXSEL is
-      when "00" => o_YDN <= w_ANDSGETK & std_logic_vector(w_SUBMUX);
-      when "01" => o_YDN <= w_UNDERFLOWMUX & "111";
-      when "10" => o_YDN <= w_ANDSGETK & "000";
-      when "11" => o_YDN <= w_UNDERFLOWMUX & "111";
+      when "00" => o_YDN   <= w_ANDSGETK & std_logic_vector(w_SUBMUX);
+      when "01" => o_YDN   <= w_UNDERFLOWMUX & "111";
+      when "10" => o_YDN   <= w_ANDSGETK & "000";
+      when "11" => o_YDN   <= w_UNDERFLOWMUX & "111";
       when others => o_YDN <= (others => '0');
     end case;
   end process;
