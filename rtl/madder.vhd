@@ -13,7 +13,7 @@ use work.madder_pkg.all;
 
 entity madder is
   generic (
-    p_WIDTH : positive := 8;
+    p_WIDTH : positive := 16;
     p_LEVEL : positive := 4
   );
   port (
