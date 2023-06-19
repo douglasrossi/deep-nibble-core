@@ -29,10 +29,13 @@ architecture rtl of nslq is
 
   component i2fp
     port (
-      i_Z : in std_logic_vector(23 downto 0);
-      o_S : out std_logic;
-      o_E : out std_logic_vector(4 downto 0);
-      o_M : out std_logic_vector(9 downto 0)
+      i_CLK : in std_logic;
+      i_RST : in std_logic;
+      i_ENA : in std_logic;
+      i_Z   : in std_logic_vector(23 downto 0);
+      o_S   : out std_logic;
+      o_E   : out std_logic_vector(4 downto 0);
+      o_M   : out std_logic_vector(9 downto 0)
     );
   end component;
 
@@ -82,10 +85,13 @@ architecture rtl of nslq is
 begin
   i2fp_inst : i2fp
   port map(
-    i_Z => i_Z,
-    o_S => w_S0,
-    o_E => w_E0,
-    o_M => w_M0
+    i_CLK => i_CLK,
+    i_RST => i_RST,
+    i_ENA => '1',
+    i_Z   => i_Z,
+    o_S   => w_S0,
+    o_E   => w_E0,
+    o_M   => w_M0
   );
 
   dln_inst : dln
@@ -120,7 +126,7 @@ begin
     o_ZERO => o_ZERO,
     o_YMAX => o_YMAX
   );
-  
+
   o_YFP <= (w_S1 & w_E1 & w_M1);
 
 end architecture;
