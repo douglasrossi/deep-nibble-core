@@ -1,15 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
-
-package madder_pkg is
-  type t_VECT is array (natural range <>) of std_logic_vector;
-  type t_MATR is array (natural range <>, natural range <>) of std_logic_vector;
-end madder_pkg;
-
-library ieee;
-use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.madder_pkg.all;
+use work.dnu_pkg.all;
 
 entity madder is
   generic (

@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.madder_pkg.all;
+use work.dnu_pkg.all;
 
 entity acc is
   generic (
