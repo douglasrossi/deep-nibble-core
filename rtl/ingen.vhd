@@ -13,19 +13,20 @@ entity ingen is
     i_RST : in std_logic;
     -- i_CTRL inputs
     i_SETK : in std_logic;
-    i_K    : in std_logic_vector(3 downto 0);
+    -- i_K    : in std_logic_vector(3 downto 0);
     i_SETP : in std_logic;
-    i_P    : in std_logic_vector(3 downto 0);
+    -- i_P    : in std_logic_vector(3 downto 0);
     i_RECT : in std_logic;
     i_GETK : in std_logic;
-    i_RAND : in std_logic_vector(9 downto 0);
+    -- i_RAND : in std_logic_vector(9 downto 0);
     o_ZERO : out std_logic;
     o_YMAX : out std_logic;
     -- DNU output
     o_YDN : out std_logic_vector(3 downto 0);
     o_YFP : out std_logic_vector(15 downto 0);
     -- Input gen
-    i_DATA : in t_VECT (p_LEVEL - 1 downto 0) (p_WIDTH - 1 downto 0)
+    i_A : in t_VECT ((2 ** p_LEVEL) - 1 downto 0) (3 downto 0);
+    i_B : in t_VECT ((2 ** p_LEVEL) - 1 downto 0) (3 downto 0)
   );
 end ingen;
 
@@ -64,11 +65,11 @@ architecture rtl of ingen is
 
 begin
 
-  generate_inputs :
-  for i in 0 to 2 ** p_LEVEL - 1 generate
-    w_A (i) <= i_DATA(i mod p_LEVEL);
-    w_B (i) <= i_DATA(p_LEVEL - 1 - (i mod p_LEVEL));
-  end generate;
+  -- generate_inputs :
+  -- for i in 0 to 2 ** p_LEVEL - 1 generate
+  --   w_A (i) <= i_DATA(i);
+  --   w_B (i) <= i_DATA(2 ** p_LEVEL - 1 - i);
+  -- end generate;
 
   dnu_inst : dnu
   generic map(
@@ -80,17 +81,17 @@ begin
     i_RST => i_RST,
     -- i_CTRL inputs
     i_SETK => i_SETK,
-    i_K    => i_K,
+    i_K    => i_A (0),
     i_SETP => i_SETP,
-    i_P    => i_P,
+    i_P    => i_B (0),
     i_RECT => i_RECT,
     i_GETK => i_GETK,
-    i_RAND => i_RAND,
+    i_RAND => i_A (1) & i_A (2) & i_A (3)(1 downto 0),
     o_ZERO => o_ZERO,
     o_YMAX => o_YMAX,
     -- DNU input
-    i_A => w_A,
-    i_B => w_B,
+    i_A => i_A,
+    i_B => i_B,
 
     -- DNU output
     o_YDN => o_YDN,
