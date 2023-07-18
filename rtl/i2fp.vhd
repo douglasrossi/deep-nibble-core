@@ -26,7 +26,7 @@ architecture rtl of i2fp is
     );
   end component;
 
-  component lod
+  component lodrom
     port (
       i_DATA : in std_logic_vector(22 downto 0);
       o_DATA : out std_logic_vector(4 downto 0)
@@ -62,7 +62,7 @@ begin
     o_DATA => w_UNSIGN
   );
 
-  U0_leading : lod
+  U0_leading : lodrom
   port map(
     i_DATA => w_UNSIGN,
     o_DATA => w_E
