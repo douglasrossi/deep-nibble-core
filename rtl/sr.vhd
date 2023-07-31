@@ -6,8 +6,8 @@ entity sr is
   port (
     i_S3   : in std_logic;
     i_E3   : in std_logic_vector(7 downto 0);
-    i_M3   : in std_logic_vector(4 downto 0);
-    i_RAND : in std_logic_vector(4 downto 0);
+    i_M3   : in std_logic_vector(6 downto 0);
+    i_RAND : in std_logic_vector(6 downto 0);
     o_S4   : out std_logic;
     o_OVF4 : out std_logic;
     o_E4   : out std_logic_vector(7 downto 0)

@@ -9,11 +9,11 @@ entity relu is
     i_RELU : in std_logic;
     i_S1   : in std_logic;
     i_E1   : in std_logic_vector(7 downto 0);
-    i_M1   : in std_logic_vector(4 downto 0);
+    i_M1   : in std_logic_vector(6 downto 0);
     o_UND2 : out std_logic;
     o_S2   : out std_logic;
     o_E2   : out std_logic_vector(7 downto 0);
-    o_M2   : out std_logic_vector(4 downto 0)
+    o_M2   : out std_logic_vector(6 downto 0)
   );
 end relu;
 
@@ -32,7 +32,7 @@ architecture rtl of relu is
     );
   end component;
 
-  signal w_D0, w_D1 : std_logic_vector(13 downto 0);
+  signal w_D0, w_D1 : std_logic_vector(15 downto 0);
   signal w_CLR      : std_logic;
 
 begin
@@ -40,13 +40,13 @@ begin
   w_CLR  <= i_RELU and i_S1;
   o_UND2 <= w_CLR;
 
-  w_D0(13)          <= i_S1;
-  w_D0(12 downto 5) <= i_E1;
-  w_D0(4 downto 0)  <= i_M1;
+  w_D0(15)          <= i_S1;
+  w_D0(14 downto 7) <= i_E1;
+  w_D0(6 downto 0)  <= i_M1;
 
   reg_inst : reg
   generic map(
-    p_WIDTH => 14
+    p_WIDTH => 16
   )
   port map(
     i_CLK => i_CLK,
@@ -56,8 +56,8 @@ begin
     o_Q   => w_D1
   );
 
-  o_S2 <= w_D1(13);
-  o_E2 <= w_D1(12 downto 5);
-  o_M2 <= w_D1(4 downto 0);
+  o_S2 <= w_D1(15);
+  o_E2 <= w_D1(14 downto 7);
+  o_M2 <= w_D1(6 downto 0);
 
 end architecture;
