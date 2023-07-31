@@ -10,12 +10,12 @@ entity dnor is
     i_E0   : in std_logic_vector(4 downto 0);
     i_SETD : in std_logic;
     i_D    : in std_logic_vector(7 downto 0);
-    i_M0   : in std_logic_vector(4 downto 0);
+    i_M0   : in std_logic_vector(6 downto 0);
     o_S1   : out std_logic;
     o_OVF1 : out std_logic;
     o_UND1 : out std_logic;
     o_E1   : out std_logic_vector(7 downto 0);
-    o_M1   : out std_logic_vector(4 downto 0));
+    o_M1   : out std_logic_vector(6 downto 0));
 end dnor;
 
 architecture rtl of dnor is

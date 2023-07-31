@@ -10,12 +10,12 @@ entity norm is
     i_E2   : in std_logic_vector(4 downto 0);
     i_SETK : in std_logic;
     i_K    : in std_logic_vector(7 downto 0);
-    i_M2   : in std_logic_vector(4 downto 0);
+    i_M2   : in std_logic_vector(6 downto 0);
     o_S3   : out std_logic;
     o_OVF3 : out std_logic;
     o_UND3 : out std_logic;
     o_E3   : out std_logic_vector(7 downto 0);
-    o_M3   : out std_logic_vector(4 downto 0));
+    o_M3   : out std_logic_vector(6 downto 0));
 end norm;
 
 architecture rtl of norm is

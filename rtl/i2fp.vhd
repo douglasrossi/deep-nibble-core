@@ -7,14 +7,14 @@ entity i2fp is
     i_Z : in std_logic_vector(31 downto 0);
     o_S : out std_logic;
     o_E : out std_logic_vector(4 downto 0);
-    o_M : out std_logic_vector(4 downto 0)
+    o_M : out std_logic_vector(6 downto 0)
   );
 end i2fp;
 
 architecture rtl of i2fp is
   signal w_UNSIGN : std_logic_vector(30 downto 0);
   signal w_E      : std_logic_vector(4 downto 0);
-  signal w_M      : std_logic_vector(4 downto 0);
+  signal w_M      : std_logic_vector(6 downto 0);
 
   component uint
     port (
@@ -34,7 +34,7 @@ architecture rtl of i2fp is
     port (
       i_DATA : in std_logic_vector(30 downto 0);
       i_SEL  : in std_logic_vector(4 downto 0);
-      o_DATA : out std_logic_vector(4 downto 0)
+      o_DATA : out std_logic_vector(6 downto 0)
     );
   end component;
 
