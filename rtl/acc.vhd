@@ -13,7 +13,7 @@ entity acc is
     i_RST : in std_logic;
     i_ENA : in std_logic;
     i_P   : in t_VECT ((2 ** p_LEVEL) - 1 downto 0) (p_WIDTH - 1 downto 0);
-    o_Z   : out std_logic_vector(23 downto 0)
+    o_Z   : out std_logic_vector(31 downto 0)
   );
 end acc;
 
@@ -73,6 +73,6 @@ begin
   w_D <= std_logic_vector(signed(w_S) + signed(w_Q));
 
   o_Z(p_WIDTH + p_LEVEL - 1 downto 0) <= w_Q;
-  o_Z(23 downto p_WIDTH + p_LEVEL)    <= (others => w_Q(p_WIDTH + p_LEVEL - 1));
+  o_Z(31 downto p_WIDTH + p_LEVEL)    <= (others => w_Q(p_WIDTH + p_LEVEL - 1));
 
 end rtl;
