@@ -45,7 +45,7 @@ begin
   w_SIGN <= i_A(3) xor i_B(3);
   w_EXP  <= std_logic_vector(unsigned(i_A) + unsigned(i_B));
   w_ADDR <= w_SIGN & w_EXP;
-  w_RST  <= i_ZRFX and w_EXP(2) and w_EXP(1) and w_EXP(0);
+  w_RST  <= i_ZRFX and i_B(2) and i_B(1) and i_B(0);
 
   romx_inst : romx
   port map(
