@@ -7,7 +7,7 @@ entity norm is
     i_CLK  : in std_logic;
     i_RST  : in std_logic;
     i_S2   : in std_logic;
-    i_E2   : in std_logic_vector(4 downto 0);
+    i_E2   : in std_logic_vector(7 downto 0);
     i_SETK : in std_logic;
     i_K    : in std_logic_vector(7 downto 0);
     i_M2   : in std_logic_vector(6 downto 0);
@@ -53,7 +53,7 @@ begin
     o_Q   => w_D
   );
 
-  w_SUB <= ("000" & unsigned(i_E2)) - unsigned(w_D);
+  w_SUB <= (unsigned(i_E2)) - unsigned(w_D);
   o_E3  <= std_logic_vector(w_SUB);
 
   o_OVF3 <= w_D(7) and w_SUB(7);

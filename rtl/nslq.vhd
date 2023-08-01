@@ -6,17 +6,14 @@ entity nslq is
   port (
     i_CLK : in std_logic;
     i_RST : in std_logic;
-    -- I2FP input
-    i_Z : in std_logic_vector(23 downto 0);
-    -- DLN inputs
+    -- NORM input
+    i_S2   : in std_logic;
+    i_E2   : in std_logic_vector(4 downto 0);
     i_SETK : in std_logic;
-    i_K    : in std_logic_vector(3 downto 0);
-    i_SETP : in std_logic;
-    i_P    : in std_logic_vector(3 downto 0);
-    -- SLQ inputs
-    i_RECT : in std_logic;
-    i_GETK : in std_logic;
-    i_RAND : in std_logic_vector(9 downto 0);
+    i_K    : in std_logic_vector(7 downto 0);
+    i_M2   : in std_logic_vector(6 downto 0);
+    -- SR inputs
+    i_RAND : in std_logic_vector(6 downto 0);
     -- NSLQ outputs
     o_YDN  : out std_logic_vector(3 downto 0);
     o_YFP  : out std_logic_vector(15 downto 0);
@@ -27,106 +24,92 @@ end entity;
 
 architecture rtl of nslq is
 
-  component i2fp
-    port (
-      i_CLK : in std_logic;
-      i_RST : in std_logic;
-      i_ENA : in std_logic;
-      i_Z   : in std_logic_vector(23 downto 0);
-      o_S   : out std_logic;
-      o_E   : out std_logic_vector(4 downto 0);
-      o_M   : out std_logic_vector(9 downto 0)
-    );
-  end component;
+  signal w_S3   : std_logic;
+  signal w_OVF3 : std_logic;
+  signal w_UND3 : std_logic;
+  signal w_E3   : std_logic_vector(7 downto 0);
+  signal w_M3   : std_logic_vector(6 downto 0);
+  signal w_S4   : std_logic;
+  signal w_OVF4 : std_logic;
+  signal w_E4   : std_logic_vector(7 downto 0);
 
-  component dln
+  component norm
     port (
       i_CLK  : in std_logic;
       i_RST  : in std_logic;
-      i_S    : in std_logic;
+      i_S2   : in std_logic;
+      i_E2   : in std_logic_vector(4 downto 0);
       i_SETK : in std_logic;
-      i_K    : in std_logic_vector(3 downto 0);
-      i_SETP : in std_logic;
-      i_P    : in std_logic_vector(3 downto 0);
-      i_E    : in std_logic_vector(4 downto 0);
-      i_M    : in std_logic_vector(9 downto 0);
-      o_S    : out std_logic;
-      o_K    : out std_logic_vector(2 downto 0);
-      o_E    : out std_logic_vector(4 downto 0);
-      o_M    : out std_logic_vector(9 downto 0)
+      i_K    : in std_logic_vector(7 downto 0);
+      i_M2   : in std_logic_vector(6 downto 0);
+      o_S3   : out std_logic;
+      o_OVF3 : out std_logic;
+      o_UND3 : out std_logic;
+      o_E3   : out std_logic_vector(7 downto 0);
+      o_M3   : out std_logic_vector(6 downto 0)
     );
   end component;
 
-  component slq
+  component sr
     port (
-      i_CLK  : in std_logic;
-      i_RST  : in std_logic;
-      i_RECT : in std_logic;
-      i_S    : in std_logic;
-      i_GETK : in std_logic;
-      i_E    : in std_logic_vector(4 downto 0);
-      i_M    : in std_logic_vector(9 downto 0);
-      i_RAND : in std_logic_vector(9 downto 0);
-      i_K    : in std_logic_vector(2 downto 0);
-      o_YDN  : out std_logic_vector(3 downto 0);
-      o_ZERO : out std_logic;
-      o_YMAX : out std_logic
+      i_S3   : in std_logic;
+      i_E3   : in std_logic_vector(7 downto 0);
+      i_M3   : in std_logic_vector(6 downto 0);
+      i_RAND : in std_logic_vector(6 downto 0);
+      o_S4   : out std_logic;
+      o_OVF4 : out std_logic;
+      o_E4   : out std_logic_vector(7 downto 0)
     );
   end component;
 
-  signal w_S0 : std_logic;
-  signal w_S1 : std_logic;
-  signal w_E0 : std_logic_vector(4 downto 0);
-  signal w_E1 : std_logic_vector(4 downto 0);
-  signal w_M0 : std_logic_vector(9 downto 0);
-  signal w_M1 : std_logic_vector(9 downto 0);
-  signal w_K  : std_logic_vector(2 downto 0);
+  component clip
+    port (
+      i_UND : in std_logic_vector(2 downto 0);
+      i_OVF : in std_logic_vector(2 downto 0);
+      i_S4  : in std_logic;
+      i_E4  : in std_logic_vector(7 downto 0);
+      i_RS  : in std_logic;
+      o_YDN : out std_logic_vector(3 downto 0)
+    );
+  end component;
 
 begin
-  i2fp_inst : i2fp
-  port map(
-    i_CLK => i_CLK,
-    i_RST => i_RST,
-    i_ENA => '1',
-    i_Z   => i_Z,
-    o_S   => w_S0,
-    o_E   => w_E0,
-    o_M   => w_M0
-  );
 
-  dln_inst : dln
+  norm_inst : norm
   port map(
     i_CLK  => i_CLK,
     i_RST  => i_RST,
-    i_S    => w_S0,
+    i_S2   => i_S2,
+    i_E2   => i_E2,
     i_SETK => i_SETK,
     i_K    => i_K,
-    i_SETP => i_SETP,
-    i_P    => i_P,
-    i_E    => w_E0,
-    i_M    => w_M0,
-    o_S    => w_S1,
-    o_K    => w_K,
-    o_E    => w_E1,
-    o_M    => w_M1
+    i_M2   => i_M2,
+    o_S3   => w_S3,
+    o_OVF3 => w_OVF3,
+    o_UND3 => w_UND3,
+    o_E3   => w_E3,
+    o_M3   => w_M3
   );
 
-  slq_inst : slq
+  sr_inst : sr
   port map(
-    i_CLK  => i_CLK,
-    i_RST  => i_RST,
-    i_RECT => i_RECT,
-    i_S    => w_S1,
-    i_GETK => i_GETK,
-    i_E    => w_E1,
-    i_M    => w_M1,
+    i_S3   => w_S3,
+    i_E3   => w_E3,
+    i_M3   => w_M3,
     i_RAND => i_RAND,
-    i_K    => w_K,
-    o_YDN  => o_YDN,
-    o_ZERO => o_ZERO,
-    o_YMAX => o_YMAX
+    o_S4   => w_S4,
+    o_OVF4 => w_OVF4,
+    o_E4   => w_E4
   );
-
+  clip_inst : clip
+  port map(
+    i_UND => i_UND,
+    i_OVF => i_OVF,
+    i_S4  => i_S4,
+    i_E4  => i_E4,
+    i_RS  => i_RS,
+    o_YDN => o_YDN
+  );
   o_YFP <= (w_S1 & w_E1 & w_M1);
 
 end architecture;
