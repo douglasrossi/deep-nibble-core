@@ -6,7 +6,7 @@ use work.dnu_pkg.all;
 entity ingen is
   generic (
     p_WIDTH : positive := 4;
-    p_LEVEL : positive := 1
+    p_LEVEL : positive := 3
   );
   port (
     i_CLK : in std_logic;

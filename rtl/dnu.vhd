@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 package dnu_pkg is
   type t_VECT is array (natural range <>) of std_logic_vector;
-  type t_MATR is array (natural range < >, natural range <>) of std_logic_vector;
+  type t_MATR is array (natural range <>, natural range <>) of std_logic_vector;
 end dnu_pkg;
 
 library ieee;
@@ -95,10 +95,12 @@ architecture rtl of dnu is
 
   component i2fp
     port (
-      i_Z : in std_logic_vector(31 downto 0);
-      o_S : out std_logic;
-      o_E : out std_logic_vector(4 downto 0);
-      o_M : out std_logic_vector(6 downto 0)
+      i_CLK : in std_logic;
+      i_RST : in std_logic;
+      i_Z   : in std_logic_vector(31 downto 0);
+      o_S   : out std_logic;
+      o_E   : out std_logic_vector(4 downto 0);
+      o_M   : out std_logic_vector(6 downto 0)
     );
   end component;
 
@@ -225,10 +227,12 @@ begin
 
   i2fp_inst : i2fp
   port map(
-    i_Z => w_Z,
-    o_S => w_S0,
-    o_E => w_E0,
-    o_M => w_M0
+    i_CLK => i_CLK,
+    i_RST => i_RST,
+    i_Z   => w_Z,
+    o_S   => w_S0,
+    o_E   => w_E0,
+    o_M   => w_M0
   );
 
   dnor_inst : dnor
